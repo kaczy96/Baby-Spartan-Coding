@@ -12,6 +12,6 @@ public class Controller : MonoBehaviour {
 	
 	void Update () {
         var move = Input.GetAxis("Horizontal");
-        rigidbody2D.velocity = new Vector2(move * maxSpeed, rigidbody2D.velocity.y);
-	}
+        GetComponent<Rigidbody2D>().velocity = new Vector2(move * maxSpeed, GetComponent<Rigidbody2D>().velocity.y);
+    }
 }
