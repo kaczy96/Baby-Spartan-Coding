@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ThrowPortal : MonoBehaviour {
-
+    public Camera cam;
     public GameObject leftPortal;
     public GameObject rightPortal;
 
@@ -28,7 +28,7 @@ public class ThrowPortal : MonoBehaviour {
 
     void throwPortal(GameObject portal)
     {
-        var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        var ray = cam.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
         if (Physics.Raycast(ray, out hit))
