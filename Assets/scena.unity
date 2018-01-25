@@ -753,11 +753,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4016054881061878, guid: 877d7ffbaabb39746a169cb6a2e20c0c, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 5.04
+      value: -8.9
       objectReference: {fileID: 0}
     - target: {fileID: 4016054881061878, guid: 877d7ffbaabb39746a169cb6a2e20c0c, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 14.34
+      value: -2.11
       objectReference: {fileID: 0}
     - target: {fileID: 4016054881061878, guid: 877d7ffbaabb39746a169cb6a2e20c0c, type: 2}
       propertyPath: m_LocalPosition.z
@@ -2847,7 +2847,7 @@ DistanceJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: -7.708164, y: 2.0474813}
   m_AutoConfigureDistance: 1
-  m_Distance: 17.709368
+  m_Distance: 4.3249416
   m_MaxDistanceOnly: 0
 --- !u!114 &1625841522
 MonoBehaviour:
