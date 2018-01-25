@@ -28,16 +28,14 @@ public class ThrowPortal : MonoBehaviour {
 
     void throwPortal(GameObject portal)
     {
-        var ray = cam.ScreenPointToRay(Input.mousePosition);
+        Ray ray = cam.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
-
         if (Physics.Raycast(ray, out hit))
         {
             Quaternion hitObjectRotation = Quaternion.LookRotation(hit.normal);
             portal.transform.position = hit.point;
             portal.transform.rotation = hitObjectRotation;
         }
-            
 
     }
 
