@@ -22,11 +22,16 @@ public class GrappingHook : MonoBehaviour {
         {
             targetPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             targetPos.z = 0;
-            hit = Physics2D.Raycast(transform.position, targetPos - transform.position, distance, hookable);
 
-            if (hit.collider != null && hit.collider.gameObject.GetComponent<Rigidbody2D>() != null)
-                
+            var direction = targetPos - transform.position;
+            direction.Normalize();
+
+            hit = Physics2D.Raycast(transform.position, direction, distance, hookable);
+
+            if (hit.collider != null)
             {
+                print("a");
+
                 joint.enabled = true;
                 joint.connectedBody = hit.collider.gameObject.GetComponent<Rigidbody2D>();
                 joint.distance = Vector2.Distance(transform.position, hit.point);
