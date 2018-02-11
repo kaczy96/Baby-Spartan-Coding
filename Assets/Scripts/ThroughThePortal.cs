@@ -6,20 +6,11 @@ public class ThroughThePortal : MonoBehaviour {
 
     public GameObject otherPortal;
 
-	void Start ()
-    {
-		
-	}
-	
-	void Update ()
-    {
-		
-	}
 
     private void OnTriggerEnter(Collider other)
     {
         Debug.Log("I toch a portal");
-        if(other.tag == "Player")
+        if(other.CompareTag("Player"))
         {
             other.transform.position = otherPortal.transform.position + otherPortal.transform.forward * 1;
         }
