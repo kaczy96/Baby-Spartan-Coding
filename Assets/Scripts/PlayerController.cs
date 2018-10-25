@@ -13,9 +13,9 @@ public class PlayerController : MonoBehaviour {
     private bool doubleJump;
     private float moveVelocity;
 
+
 	void Start ()
     {
-		
 	}
 
     void FixedUpdate()
@@ -57,8 +57,10 @@ public class PlayerController : MonoBehaviour {
         }
 
         GetComponent<Rigidbody2D>().velocity = new Vector2(moveVelocity, GetComponent<Rigidbody2D>().velocity.y);
-        #endregion
-    }
+
+       
+            #endregion
+        }
 
     public void Jump()
     {
