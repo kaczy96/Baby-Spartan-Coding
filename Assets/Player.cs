@@ -7,28 +7,61 @@ public class Player : MonoBehaviour {
     [SerializeField] float runSpeed = 5f;
     [SerializeField] float jumpHeight = 5f;
     [SerializeField] float dashSpeed = 5f;
+    public float coolDown = 1;
+    public float coolDownTimer;
+    float timer;
+    float direction;
     Rigidbody2D rb;
     Collider2D myCollider2D;
     bool canDoubleJump;
 
-	void Start ()
+
+    public Transform groundCheck;
+    public float groundCheckRadius;
+    public LayerMask whatIsGroud;
+    private bool grounded;
+
+    void Start ()
     {
         rb = GetComponent<Rigidbody2D>();
         myCollider2D = GetComponent<Collider2D>();
+        
 	}
-	
-	void Update ()
+
+    void FixedUpdate()
+    {
+        grounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, whatIsGroud);
+    }
+
+
+    void Update ()
     {
         Run();
         Jump();
-        Dash();
         
+        if(coolDownTimer > 0)
+        {
+            coolDownTimer -= Time.deltaTime;
+        }
+
+        if(coolDownTimer < 0)
+        {
+            coolDownTimer = 0;
+        }
+
+        if(coolDownTimer == 0)
+        {
+            Dash();
+        }
+
     }
 
     bool IsFacingRight()
     {
         return rb.velocity.x > 0;
     }
+
+
 
     private void Run()
     {
@@ -39,22 +72,20 @@ public class Player : MonoBehaviour {
 
     private void Jump()
     {
-        if (!myCollider2D.IsTouchingLayers(LayerMask.GetMask("Ground")) && canDoubleJump == true)
+        if (!grounded && canDoubleJump == true)
         {
             if (Input.GetButtonDown("Jump"))
             {
-                Vector2 jumpVelocityToAdd = new Vector2(0f, jumpHeight);
-                rb.velocity += jumpVelocityToAdd;
+                GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, jumpHeight);
                 canDoubleJump = false;
             }
 
         }
-        if (myCollider2D.IsTouchingLayers(LayerMask.GetMask("Ground")))
+        if (grounded)
         {
             if (Input.GetButtonDown("Jump"))
             {
-                Vector2 jumpVelocityToAdd = new Vector2(0f, jumpHeight);
-                rb.velocity += jumpVelocityToAdd;
+                GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, jumpHeight);
                 canDoubleJump = true;
             }
         }
@@ -63,19 +94,22 @@ public class Player : MonoBehaviour {
     private void Dash()
     {
         //left ctrl
+        
         if(Input.GetButtonDown("Dash"))
         {
-            if (IsFacingRight())
-            {
-                Vector2 dashVelocityToAdd = new Vector2(dashSpeed, 0f);
-                rb.velocity += dashVelocityToAdd;
-            }
+                if (IsFacingRight())
+                {
+                    Vector2 dashVelocityToAdd = new Vector2(dashSpeed, 0f);
+                    rb.velocity += dashVelocityToAdd;
+                    coolDownTimer = coolDown;
+                }
 
-            else
-            {
-                Vector2 dashVelocityToAdd = new Vector2(-dashSpeed, 0f);
-                rb.velocity += dashVelocityToAdd;
-            }
+                if(!IsFacingRight())
+                {
+                    Vector2 dashVelocityToAdd = new Vector2(-dashSpeed, 0f);
+                    rb.velocity += dashVelocityToAdd;
+                    coolDownTimer = coolDown;
+                }
         }
     }
 
