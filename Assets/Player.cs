@@ -8,10 +8,13 @@ public class Player : MonoBehaviour {
     [SerializeField] float jumpHeight = 5f;
     [SerializeField] float dashSpeed = 5f;
     Rigidbody2D rb;
+    Collider2D myCollider2D;
+    bool canDoubleJump;
 
 	void Start ()
     {
         rb = GetComponent<Rigidbody2D>();
+        myCollider2D = GetComponent<Collider2D>();
 	}
 	
 	void Update ()
@@ -19,7 +22,13 @@ public class Player : MonoBehaviour {
         Run();
         Jump();
         Dash();
-	}
+        
+    }
+
+    bool IsFacingRight()
+    {
+        return rb.velocity.x > 0;
+    }
 
     private void Run()
     {
@@ -30,20 +39,43 @@ public class Player : MonoBehaviour {
 
     private void Jump()
     {
-        if (Input.GetButtonDown("Jump"))
+        if (!myCollider2D.IsTouchingLayers(LayerMask.GetMask("Ground")) && canDoubleJump == true)
         {
-            Vector2 jumpVelocityToAdd = new Vector2(0f, jumpHeight);
-            rb.velocity += jumpVelocityToAdd;
-        }
+            if (Input.GetButtonDown("Jump"))
+            {
+                Vector2 jumpVelocityToAdd = new Vector2(0f, jumpHeight);
+                rb.velocity += jumpVelocityToAdd;
+                canDoubleJump = false;
+            }
 
+        }
+        if (myCollider2D.IsTouchingLayers(LayerMask.GetMask("Ground")))
+        {
+            if (Input.GetButtonDown("Jump"))
+            {
+                Vector2 jumpVelocityToAdd = new Vector2(0f, jumpHeight);
+                rb.velocity += jumpVelocityToAdd;
+                canDoubleJump = true;
+            }
+        }
     }
 
     private void Dash()
     {
+        //left ctrl
         if(Input.GetButtonDown("Dash"))
         {
-            Vector2 dashVelocityToAdd = new Vector2(dashSpeed, 0f);
-            rb.velocity += dashVelocityToAdd;
+            if (IsFacingRight())
+            {
+                Vector2 dashVelocityToAdd = new Vector2(dashSpeed, 0f);
+                rb.velocity += dashVelocityToAdd;
+            }
+
+            else
+            {
+                Vector2 dashVelocityToAdd = new Vector2(-dashSpeed, 0f);
+                rb.velocity += dashVelocityToAdd;
+            }
         }
     }
 
