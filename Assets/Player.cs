@@ -88,23 +88,36 @@ public class Player : MonoBehaviour {
 
     private void Jump()
     {
-        if (!grounded && canDoubleJump == true)
-        {
-            if (Input.GetButtonDown("Jump"))
+        
+            if(rb.velocity.y == 0)
             {
-                GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, jumpHeight);
-                canDoubleJump = false;
+            grounded = true;
+            }
+            else
+            {
+            grounded = false;
             }
 
-        }
-        if (grounded)
-        {
-            if (Input.GetButtonDown("Jump"))
+            if(grounded)
+            {
+            canDoubleJump = true;
+            }
+            if (grounded && Input.GetButtonDown("Jump"))
             {
                 GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, jumpHeight);
-                canDoubleJump = true;
             }
-        }
+
+        
+        
+            else if (canDoubleJump && Input.GetButtonDown("Jump"))
+            {
+                GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, jumpHeight);
+            canDoubleJump = false;
+            }
+        
+
+        
+        
     }
 
     private void Dash()
@@ -131,4 +144,11 @@ public class Player : MonoBehaviour {
         }
     }
 
+    //void OnTriggerEnter2D(Collider2D collision)
+    //{
+    //    if (collision.tag == "Ground")
+    //    {
+    //        grounded = true;
+    //    }
+    //}
 }
