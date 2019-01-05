@@ -58,7 +58,18 @@ public class Player : MonoBehaviour {
             Dash();
         }
 
-        Debug.Log(IsFacingRight());
+        Debug.Log(facingRight);
+
+
+        if (Input.GetKeyDown("a"))
+        {
+            facingRight = false;
+        }
+
+        if (Input.GetKeyDown("d"))
+        {
+            facingRight = true;
+        }
     }
 
     bool IsFacingRight()
@@ -102,17 +113,19 @@ public class Player : MonoBehaviour {
         
         if(Input.GetButtonDown("Dash"))
         {
-                if (IsFacingRight())
+                if (facingRight)
                 {
-                    Vector2 dashVelocityToAdd = new Vector2(dashSpeed, 0f);
-                    rb.velocity += dashVelocityToAdd;
+                    //Vector2 dashVelocityToAdd = new Vector2(dashSpeed, 0f);
+                    //rb.velocity += dashVelocityToAdd;
+                    rb.velocity = Vector2.right * dashSpeed;
                     coolDownTimer = coolDown;
                 }
 
-                if(!IsFacingRight())
+                if(!facingRight)
                 {
-                    Vector2 dashVelocityToAdd = new Vector2(-dashSpeed, 0f);
-                    rb.velocity += dashVelocityToAdd;
+                    //Vector2 dashVelocityToAdd = new Vector2(-dashSpeed, 0f);
+                    //rb.velocity += dashVelocityToAdd;
+                    rb.velocity = Vector2.left * dashSpeed;
                     coolDownTimer = coolDown;
                 }
         }
