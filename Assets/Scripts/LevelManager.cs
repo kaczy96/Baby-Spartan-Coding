@@ -5,15 +5,13 @@ using UnityEngine;
 public class LevelManager : MonoBehaviour {
 
     public GameObject currentCheckpoint;
-    private PlayerController player;
-    public GameObject deathParticle;
-    public GameObject respawnParticle;
+    private Player player;
     public float respawnDelay;
     private float gravityStore;
 
 	void Start ()
     {
-        player = FindObjectOfType<PlayerController>();
+        player = FindObjectOfType<Player>();
 	}
 	
 	void Update ()

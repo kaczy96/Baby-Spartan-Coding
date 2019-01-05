@@ -7,6 +7,8 @@ public class Player : MonoBehaviour {
     [SerializeField] float runSpeed = 5f;
     [SerializeField] float jumpHeight = 5f;
     [SerializeField] float dashSpeed = 5f;
+    public float health = 100;
+    public float startingHealth = 100;
     public float coolDown = 1;
     public float coolDownTimer;
     float timer;
@@ -15,14 +17,16 @@ public class Player : MonoBehaviour {
     Collider2D myCollider2D;
     bool canDoubleJump;
 
-
     public Transform groundCheck;
     public float groundCheckRadius;
     public LayerMask whatIsGroud;
     private bool grounded;
 
+    private bool facingRight;
+
     void Start ()
     {
+        facingRight = true;
         rb = GetComponent<Rigidbody2D>();
         myCollider2D = GetComponent<Collider2D>();
         
@@ -54,6 +58,7 @@ public class Player : MonoBehaviour {
             Dash();
         }
 
+        Debug.Log(IsFacingRight());
     }
 
     bool IsFacingRight()
