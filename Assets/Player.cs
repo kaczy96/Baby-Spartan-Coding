@@ -46,7 +46,6 @@ public class Player : MonoBehaviour {
         Run();
         Jump();
         DashCooldown();
-        Death();
     
 
         Debug.Log(facingRight);
@@ -151,15 +150,7 @@ public class Player : MonoBehaviour {
         }
     }
 
-    private void Death()
-    {
-        if (health <= 0)
-        {
-            Debug.Log("Player just die");
-            transform.position = currentCheckpoint.transform.position;
-            healthBar.fillAmount = startingHealth;
-        }
-    }
+    
 
    
 }
