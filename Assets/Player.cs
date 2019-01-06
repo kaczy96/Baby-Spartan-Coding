@@ -1,28 +1,31 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour {
 
     [SerializeField] float runSpeed = 5f;
     [SerializeField] float jumpHeight = 5f;
     [SerializeField] float dashSpeed = 5f;
-    public float health = 100;
-    public float startingHealth = 100;
-    public float coolDown = 1;
-    public float coolDownTimer;
+    [SerializeField] public float health = 100;
+    [SerializeField] public float startingHealth = 100;
+    [SerializeField] float coolDown = 1;
+    [SerializeField] float coolDownTimer;
     float timer;
     float direction;
     Rigidbody2D rb;
     Collider2D myCollider2D;
     bool canDoubleJump;
-
+    private float dashTime;
+    [SerializeField] float startDashTime;
     public Transform groundCheck;
     public float groundCheckRadius;
     public LayerMask whatIsGroud;
     private bool grounded;
-
-    private bool facingRight;
+    public bool facingRight;
+    public Image healthBar;
+    public GameObject currentCheckpoint;
 
     void Start ()
     {
@@ -42,21 +45,9 @@ public class Player : MonoBehaviour {
     {
         Run();
         Jump();
-        
-        if(coolDownTimer > 0)
-        {
-            coolDownTimer -= Time.deltaTime;
-        }
-
-        if(coolDownTimer < 0)
-        {
-            coolDownTimer = 0;
-        }
-
-        if(coolDownTimer == 0)
-        {
-            Dash();
-        }
+        DashCooldown();
+        Death();
+    
 
         Debug.Log(facingRight);
 
@@ -71,12 +62,6 @@ public class Player : MonoBehaviour {
             facingRight = true;
         }
     }
-
-    bool IsFacingRight()
-    {
-        return rb.velocity.x > 0;
-    }
-
 
 
     private void Run()
@@ -126,29 +111,55 @@ public class Player : MonoBehaviour {
         
         if(Input.GetButtonDown("Dash"))
         {
+            if (dashTime <= 0)
+            {
+                dashTime = startDashTime;
+            }
+            else
+            {
+                dashTime -= Time.deltaTime;
                 if (facingRight)
                 {
-                    //Vector2 dashVelocityToAdd = new Vector2(dashSpeed, 0f);
-                    //rb.velocity += dashVelocityToAdd;
                     rb.velocity = Vector2.right * dashSpeed;
                     coolDownTimer = coolDown;
                 }
 
-                if(!facingRight)
+                if (!facingRight)
                 {
-                    //Vector2 dashVelocityToAdd = new Vector2(-dashSpeed, 0f);
-                    //rb.velocity += dashVelocityToAdd;
                     rb.velocity = Vector2.left * dashSpeed;
                     coolDownTimer = coolDown;
                 }
+            }
         }
     }
 
-    //void OnTriggerEnter2D(Collider2D collision)
-    //{
-    //    if (collision.tag == "Ground")
-    //    {
-    //        grounded = true;
-    //    }
-    //}
+    private void DashCooldown()
+    {
+        if (coolDownTimer > 0)
+        {
+            coolDownTimer -= Time.deltaTime;
+        }
+
+        if (coolDownTimer < 0)
+        {
+            coolDownTimer = 0;
+        }
+
+        if (coolDownTimer == 0)
+        {
+            Dash();
+        }
+    }
+
+    private void Death()
+    {
+        if (health <= 0)
+        {
+            Debug.Log("Player just die");
+            transform.position = currentCheckpoint.transform.position;
+            healthBar.fillAmount = startingHealth;
+        }
+    }
+
+   
 }

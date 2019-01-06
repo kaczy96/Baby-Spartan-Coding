@@ -348,6 +348,10 @@ Prefab:
       propertyPath: m_Name
       value: Ground (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 1299728992221080, guid: 571c26a47ccaf804cb75fbb2513d4c8b, type: 2}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 571c26a47ccaf804cb75fbb2513d4c8b, type: 2}
   m_IsPrefabAsset: 0
@@ -709,11 +713,13 @@ MonoBehaviour:
   startingHealth: 100
   coolDown: 1
   coolDownTimer: 1
+  startDashTime: 5
   groundCheck: {fileID: 1862641980}
   groundCheckRadius: 1
   whatIsGroud:
     serializedVersion: 2
     m_Bits: 256
+  facingRight: 0
 --- !u!50 &976612446
 Rigidbody2D:
   serializedVersion: 4
@@ -742,7 +748,7 @@ BoxCollider2D:
   m_GameObject: {fileID: 976612444}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 9a2d48031b7c4b1409e82279c147339d, type: 2}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
@@ -831,6 +837,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelManager: {fileID: 34051597}
   healthBar: {fileID: 894743815}
+  currentCheckpoint: {fileID: 1551662716}
+  spawnPoint: {fileID: 1551662719}
 --- !u!1 &1244251328
 GameObject:
   m_ObjectHideFlags: 0
@@ -954,7 +962,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c2c85602cfe60f4ea72c6099ad5a2aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelManager: {fileID: 34051597}
+  levelManager: {fileID: 0}
 --- !u!212 &1551662718
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1008,14 +1016,14 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1551662716}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -34.614265, y: -2.477186, z: 0}
+  m_LocalPosition: {x: -34.614265, y: -2.42, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!61 &1551662720
-BoxCollider2D:
+--- !u!58 &1551662720
+CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
@@ -1027,18 +1035,8 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.72, y: 0.75}
-    newSize: {x: 0.72, y: 0.75}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.72, y: 0.75}
-  m_EdgeRadius: 0
+  m_Radius: 0.375
 --- !u!1 &1709138009
 GameObject:
   m_ObjectHideFlags: 0
@@ -1052,7 +1050,7 @@ GameObject:
   - component: {fileID: 1709138010}
   m_Layer: 8
   m_Name: Ground (1)
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
