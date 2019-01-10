@@ -17,6 +17,7 @@ public class Player : MonoBehaviour {
     Rigidbody2D rb;
     Collider2D myCollider2D;
     bool canDoubleJump;
+    private bool isDashing;
     private float dashTime;
     [SerializeField] float startDashTime;
     public Transform groundCheck;
@@ -26,12 +27,16 @@ public class Player : MonoBehaviour {
     public bool facingRight;
     public Image healthBar;
     public GameObject currentCheckpoint;
+    private Animator myAnimator;
+    private SpriteRenderer mySpriteRenderer;
 
     void Start ()
     {
         facingRight = true;
         rb = GetComponent<Rigidbody2D>();
         myCollider2D = GetComponent<Collider2D>();
+        myAnimator = GetComponent<Animator>();
+        mySpriteRenderer = GetComponent<SpriteRenderer>();
         
 	}
 
@@ -46,6 +51,10 @@ public class Player : MonoBehaviour {
         Run();
         Jump();
         DashCooldown();
+
+        myAnimator.SetFloat("MoveSpeed", Mathf.Abs(rb.velocity.x));
+        myAnimator.SetBool("ifGrounded", grounded);
+        myAnimator.SetBool("ifDashing", isDashing);
     
 
         Debug.Log(facingRight);
@@ -65,9 +74,17 @@ public class Player : MonoBehaviour {
 
     private void Run()
     {
-        float controlThrow = Input.GetAxis("Horizontal");
-        Vector2 playerVelocity = new Vector2(controlThrow * runSpeed, rb.velocity.y);
-        rb.velocity = playerVelocity;
+        if (Input.GetAxisRaw("Horizontal") > 0f)
+        {
+            rb.velocity = new Vector3(runSpeed, rb.velocity.y, 0f);
+            mySpriteRenderer.flipX = false;
+        }
+        else if (Input.GetAxisRaw("Horizontal") < 0f)
+        {
+            rb.velocity = new Vector3(-runSpeed, rb.velocity.y, 0f);
+            mySpriteRenderer.flipX = true;
+        }
+        else rb.velocity = new Vector3(0f, rb.velocity.y, 0f);
     }
 
     private void Jump()
@@ -107,8 +124,8 @@ public class Player : MonoBehaviour {
     private void Dash()
     {
         //left ctrl
-        
-        if(Input.GetButtonDown("Dash"))
+
+        if (Input.GetButtonDown("Dash"))
         {
             if (dashTime <= 0)
             {
@@ -128,8 +145,10 @@ public class Player : MonoBehaviour {
                     rb.velocity = Vector2.left * dashSpeed;
                     coolDownTimer = coolDown;
                 }
+                isDashing = true;
             }
         }
+        else isDashing = false;
     }
 
     private void DashCooldown()
@@ -137,6 +156,7 @@ public class Player : MonoBehaviour {
         if (coolDownTimer > 0)
         {
             coolDownTimer -= Time.deltaTime;
+            
         }
 
         if (coolDownTimer < 0)
