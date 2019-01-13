@@ -152,7 +152,7 @@ public class Player : MonoBehaviour {
         
             else if (canDoubleJump && Input.GetButtonDown("Jump"))
             {
-                GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, jumpHeight);
+                GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, jumpHeight*1.2f);
             canDoubleJump = false;
             }
         
