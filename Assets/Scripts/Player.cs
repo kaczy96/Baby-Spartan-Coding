@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -29,6 +30,9 @@ public class Player : MonoBehaviour {
     public GameObject currentCheckpoint;
     private Animator myAnimator;
     private SpriteRenderer mySpriteRenderer;
+    public bool isAttacking;
+    private float attackTimer = 0f;
+    private float attackCooldown = 0.5f;
 
     void Start ()
     {
@@ -51,10 +55,12 @@ public class Player : MonoBehaviour {
         Run();
         Jump();
         DashCooldown();
+        Attack();
 
         myAnimator.SetFloat("MoveSpeed", Mathf.Abs(rb.velocity.x));
         myAnimator.SetBool("ifGrounded", grounded);
         myAnimator.SetBool("ifDashing", isDashing);
+        myAnimator.SetBool("ifAttacking", isAttacking);
     
 
         Debug.Log(facingRight);
@@ -71,6 +77,25 @@ public class Player : MonoBehaviour {
         }
     }
 
+    private void Attack()
+    {
+        if (Input.GetKeyDown(KeyCode.X) && !isAttacking)
+        {
+            isAttacking = true;
+            attackTimer = attackCooldown;
+        }
+        if (isAttacking)
+        {
+            if(attackTimer > 0)
+            {
+                attackTimer -= Time.deltaTime;
+            }
+            else
+            {
+                isAttacking = false;
+            }
+        }
+    }
 
     private void Run()
     {
