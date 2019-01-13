@@ -31,6 +31,8 @@ public class Player : MonoBehaviour {
     private Animator myAnimator;
     private SpriteRenderer mySpriteRenderer;
     public bool isAttacking;
+    public bool isJumping;
+    public bool isFalling;
     private float attackTimer = 0f;
     private float attackCooldown = 0.5f;
 
@@ -61,6 +63,8 @@ public class Player : MonoBehaviour {
         myAnimator.SetBool("ifGrounded", grounded);
         myAnimator.SetBool("ifDashing", isDashing);
         myAnimator.SetBool("ifAttacking", isAttacking);
+        myAnimator.SetBool("ifJumping", isJumping);
+        myAnimator.SetBool("ifFalling", isFalling);
     
 
         Debug.Log(facingRight);
@@ -118,11 +122,22 @@ public class Player : MonoBehaviour {
             if(rb.velocity.y == 0)
             {
             grounded = true;
+            isJumping = false;
+            isFalling = false;
             }
-            else
+            if(rb.velocity.y > 0)
             {
             grounded = false;
+            isJumping = true;
+            isFalling = false;
             }
+            if(rb.velocity.y < 0)
+            {
+            grounded = false;
+            isJumping = false;
+            isFalling = true;
+            }
+     
 
             if(grounded)
             {
