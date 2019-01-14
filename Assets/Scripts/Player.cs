@@ -67,7 +67,6 @@ public class Player : MonoBehaviour {
         myAnimator.SetBool("ifFalling", isFalling);
     
 
-        Debug.Log(facingRight);
 
 
         if (Input.GetKeyDown("a"))
@@ -119,19 +118,13 @@ public class Player : MonoBehaviour {
     private void Jump()
     {
         
-            if(rb.velocity.y == 0)
+            if(rb.velocity.y <= 0)
             {
             grounded = true;
             isJumping = false;
             isFalling = false;
             }
-            if(rb.velocity.y > 0)
-            {
-            grounded = false;
-            isJumping = true;
-            isFalling = false;
-            }
-            if(rb.velocity.y < 0)
+            if(rb.velocity.y < -5) //temporary - need fix (values just for bridge)
             {
             grounded = false;
             isJumping = false;
@@ -146,6 +139,9 @@ public class Player : MonoBehaviour {
             if (grounded && Input.GetButtonDown("Jump"))
             {
                 GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, jumpHeight);
+            grounded = false;
+            isJumping = true;
+            isFalling = false;
             }
 
         
@@ -153,6 +149,9 @@ public class Player : MonoBehaviour {
             else if (canDoubleJump && Input.GetButtonDown("Jump"))
             {
                 GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, jumpHeight*1.2f);
+            grounded = false;
+            isJumping = true;
+            isFalling = false;
             canDoubleJump = false;
             }
         
