@@ -48,7 +48,7 @@ public class Player : MonoBehaviour {
 
     void FixedUpdate()
     {
-        grounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, whatIsGroud);
+        //grounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, whatIsGroud);
     }
 
 
@@ -102,16 +102,15 @@ public class Player : MonoBehaviour {
 
     private void Run()
     {
-        if (Input.GetAxisRaw("Horizontal") > 0f)
-        {
-            rb.velocity = new Vector3(runSpeed, rb.velocity.y, 0f);
-            mySpriteRenderer.flipX = false;
-        }
-        else if (Input.GetAxisRaw("Horizontal") < 0f)
-        {
-            rb.velocity = new Vector3(-runSpeed, rb.velocity.y, 0f);
-            mySpriteRenderer.flipX = true;
-        }
+		if (Input.GetAxisRaw ("Horizontal") > 0f) {
+			rb.velocity = new Vector3 (runSpeed, rb.velocity.y, 0f);
+			mySpriteRenderer.flipX = false;
+		} else if (Input.GetAxisRaw ("Horizontal") < 0f) {
+			rb.velocity = new Vector3 (-runSpeed, rb.velocity.y, 0f);
+			mySpriteRenderer.flipX = true;
+		} else if (dashTime > 0) 
+			return ;
+
         else rb.velocity = new Vector3(0f, rb.velocity.y, 0f);
     }
 
@@ -166,6 +165,7 @@ public class Player : MonoBehaviour {
 
         if (Input.GetButtonDown("Dash"))
         {
+
             if (dashTime <= 0)
             {
                 dashTime = startDashTime;
@@ -175,19 +175,26 @@ public class Player : MonoBehaviour {
                 dashTime -= Time.deltaTime;
                 if (facingRight)
                 {
+
                     rb.velocity = Vector2.right * dashSpeed;
+                    
                     coolDownTimer = coolDown;
                 }
 
                 if (!facingRight)
                 {
+
                     rb.velocity = Vector2.left * dashSpeed;
+                    
                     coolDownTimer = coolDown;
                 }
                 isDashing = true;
             }
         }
-        else isDashing = false;
+        else
+        {
+            isDashing = false;
+        }
     }
 
     private void DashCooldown()
