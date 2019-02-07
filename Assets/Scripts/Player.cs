@@ -108,9 +108,8 @@ public class Player : MonoBehaviour {
 		} else if (Input.GetAxisRaw ("Horizontal") < 0f) {
 			rb.velocity = new Vector3 (-runSpeed, rb.velocity.y, 0f);
 			mySpriteRenderer.flipX = true;
-		} else if (dashTime > 0) 
-			return ;
-
+		} else if (dashTime > 0)
+			return;
         else rb.velocity = new Vector3(0f, rb.velocity.y, 0f);
     }
 
@@ -137,7 +136,7 @@ public class Player : MonoBehaviour {
             }
             if (grounded && Input.GetButtonDown("Jump"))
             {
-                rb.velocity = new Vector2(rb.velocity.x, jumpHeight);
+            rb.velocity = new Vector2(rb.velocity.x, jumpHeight);
             grounded = false;
             isJumping = true;
             isFalling = false;
@@ -147,7 +146,7 @@ public class Player : MonoBehaviour {
         
             else if (canDoubleJump && Input.GetButtonDown("Jump"))
             {
-                rb.velocity = new Vector2(rb.velocity.x, jumpHeight*1.2f);
+            rb.velocity = new Vector2(rb.velocity.x, jumpHeight*1.2f);
             grounded = false;
             isJumping = true;
             isFalling = false;
@@ -165,7 +164,7 @@ public class Player : MonoBehaviour {
 
         if (Input.GetButtonDown("Dash"))
         {
-
+			Debug.Log ("Dash");
             if (dashTime <= 0)
             {
                 dashTime = startDashTime;
@@ -175,26 +174,19 @@ public class Player : MonoBehaviour {
                 dashTime -= Time.deltaTime;
                 if (facingRight)
                 {
-
                     rb.velocity = Vector2.right * dashSpeed;
-                    
                     coolDownTimer = coolDown;
                 }
 
                 if (!facingRight)
                 {
-
                     rb.velocity = Vector2.left * dashSpeed;
-                    
                     coolDownTimer = coolDown;
                 }
                 isDashing = true;
             }
         }
-        else
-        {
-            isDashing = false;
-        }
+        else isDashing = false;
     }
 
     private void DashCooldown()

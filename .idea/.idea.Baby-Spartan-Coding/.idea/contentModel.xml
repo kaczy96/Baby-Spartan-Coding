@@ -180,6 +180,7 @@
           </e>
         </e>
         <e p="Scripts" t="Include">
+          <e p="AIController.cs" t="Include" />
           <e p="CameraController.cs" t="Include" />
           <e p="CameraFollow.cs" t="Include" />
           <e p="CameraMoves.cs" t="Include" />
@@ -190,6 +191,7 @@
           <e p="EnemyDamage.cs" t="Include" />
           <e p="EnemyMovement.cs" t="Include" />
           <e p="EnemyPatrol.cs" t="Include" />
+          <e p="Geyser.cs" t="Include" />
           <e p="KillPlayer.cs" t="Include" />
           <e p="LavaBall.cs" t="Include" />
           <e p="LevelManager.cs" t="Include" />

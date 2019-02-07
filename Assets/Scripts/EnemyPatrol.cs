@@ -10,11 +10,12 @@ public class EnemyPatrol : MonoBehaviour {
     public float wallCheckRadius;
     public LayerMask whatIsWall;
     private bool wall;
+    private Rigidbody2D rb;
 
     void Start ()
     {
-		
-	}
+        rb = GetComponent<Rigidbody2D>();
+    }
 	
 	void Update ()
     {
@@ -28,12 +29,12 @@ public class EnemyPatrol : MonoBehaviour {
         if (moveRight)
         {
             transform.localScale = new Vector3(-1f, 1f, 1f);
-            GetComponent<Rigidbody2D>().velocity = new Vector2(moveSpeed, GetComponent<Rigidbody2D>().velocity.y);
+            rb.velocity = new Vector2(moveSpeed, rb.velocity.y);
         }
         else
         {
             transform.localScale = new Vector3(1f, 1f, 1f);
-            GetComponent<Rigidbody2D>().velocity = new Vector2(-moveSpeed, GetComponent<Rigidbody2D>().velocity.y);
+            rb.velocity = new Vector2(-moveSpeed, rb.velocity.y);
         }
 	}
 }
