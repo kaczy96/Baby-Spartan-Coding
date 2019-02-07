@@ -138,7 +138,7 @@ public class Player : MonoBehaviour {
             }
             if (grounded && Input.GetButtonDown("Jump"))
             {
-                GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, jumpHeight);
+                rb.velocity = new Vector2(rb.velocity.x, jumpHeight);
             grounded = false;
             isJumping = true;
             isFalling = false;
@@ -148,7 +148,7 @@ public class Player : MonoBehaviour {
         
             else if (canDoubleJump && Input.GetButtonDown("Jump"))
             {
-                GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, jumpHeight*1.2f);
+                rb.velocity = new Vector2(rb.velocity.x, jumpHeight*1.2f);
             grounded = false;
             isJumping = true;
             isFalling = false;
