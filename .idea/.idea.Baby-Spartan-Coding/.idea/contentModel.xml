@@ -17,6 +17,9 @@
             <e p="NormalMappedTileAnimated.shader" t="Include" />
           </e>
         </e>
+        <e p="InventorySlot.cs" t="Include" />
+        <e p="InventoryUI.cs" t="Include" />
+        <e p="ItemPickup.cs" t="Include" />
         <e p="PostProcessing" t="Include">
           <e p="Editor" t="Include">
             <e p="Attributes" t="Include">
@@ -180,23 +183,31 @@
           </e>
         </e>
         <e p="Scripts" t="Include">
-          <e p="AIController.cs" t="Include" />
           <e p="CameraController.cs" t="Include" />
           <e p="CameraFollow.cs" t="Include" />
           <e p="CameraMoves.cs" t="Include" />
-          <e p="Checkpoint.cs" t="Include" />
           <e p="Controller.cs" t="Include" />
           <e p="DeathZone.cs" t="Include" />
-          <e p="DestroyFinishedParticle.cs" t="Include" />
-          <e p="EnemyDamage.cs" t="Include" />
-          <e p="EnemyMovement.cs" t="Include" />
-          <e p="EnemyPatrol.cs" t="Include" />
+          <e p="Enemy" t="Include">
+            <e p="AIController.cs" t="Include" />
+            <e p="EnemyDamage.cs" t="Include" />
+            <e p="EnemyMovement.cs" t="Include" />
+            <e p="EnemyPatrol.cs" t="Include" />
+          </e>
           <e p="Geyser.cs" t="Include" />
-          <e p="KillPlayer.cs" t="Include" />
+          <e p="Inventory" t="Include">
+            <e p="Interactable.cs" t="Include" />
+            <e p="Inventory.cs" t="Include" />
+            <e p="Item.cs" t="Include" />
+          </e>
           <e p="LavaBall.cs" t="Include" />
           <e p="LevelManager.cs" t="Include" />
           <e p="Opacity.cs" t="Include" />
-          <e p="Player.cs" t="Include" />
+          <e p="Player" t="Include">
+            <e p="Checkpoint.cs" t="Include" />
+            <e p="KillPlayer.cs" t="Include" />
+            <e p="Player.cs" t="Include" />
+          </e>
           <e p="Wolf.cs" t="Include" />
         </e>
       </e>

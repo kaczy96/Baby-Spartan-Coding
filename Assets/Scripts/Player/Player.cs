@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class Player : MonoBehaviour {
@@ -48,12 +49,13 @@ public class Player : MonoBehaviour {
 
     void FixedUpdate()
     {
-        //grounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, whatIsGroud);
+        grounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, whatIsGroud);
     }
 
 
     void Update ()
     {
+        
         Run();
         Jump();
         DashCooldown();
@@ -78,6 +80,9 @@ public class Player : MonoBehaviour {
         {
             facingRight = true;
         }
+        
+        
+        
     }
 
     private void Attack()
