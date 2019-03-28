@@ -25,7 +25,7 @@ public class KillPlayer : MonoBehaviour {
         Death();
     }
 
-    private void Death()
+    public  void Death()
     {
         if (player.health <= 0)
         {
