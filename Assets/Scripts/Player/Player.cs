@@ -5,7 +5,11 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+<<<<<<< HEAD
 public class Player : MonoBehaviour 
+=======
+public class Player : MonoBehaviour
+>>>>>>> 7c371a28595a0c6c87bc7ea77e9d139662784b6b
 {
 
      
@@ -14,16 +18,16 @@ public class Player : MonoBehaviour
     [SerializeField] float dashSpeed = 5f;
     [SerializeField] public float health = 100;
     [SerializeField] public float startingHealth = 100;
-    [SerializeField] float coolDown = 1;
-    [SerializeField] float coolDownTimer;
+    [SerializeField] float cooldownBetweenDashes = 1;
+    [SerializeField] float minimalTimeToNextDash;
     float timer;
     float direction;
     Rigidbody2D rb;
     Collider2D myCollider2D;
     bool canDoubleJump;
-    private bool isDashing;
-    private float dashTime;
-    [SerializeField] float startDashTime;
+    public bool isDashing;
+    private float timeToEndOfTheCurrentDash;
+    [SerializeField] float minimalTimeSinceLastDash = 1;
     public Transform groundCheck;
     public float groundCheckRadius;
     public LayerMask whatIsGroud;
@@ -39,15 +43,15 @@ public class Player : MonoBehaviour
     private float attackTimer = 0f;
     private float attackCooldown = 0.5f;
 
-    void Start ()
+    void Start()
     {
         facingRight = true;
         rb = GetComponent<Rigidbody2D>();
         myCollider2D = GetComponent<Collider2D>();
         myAnimator = GetComponent<Animator>();
         mySpriteRenderer = GetComponent<SpriteRenderer>();
-        
-	}
+
+    }
 
     void FixedUpdate()
     {
@@ -55,12 +59,20 @@ public class Player : MonoBehaviour
     }
 
 
-    void Update ()
+
+
+
+    void Update()
     {
-        
-        Run();
-        Jump();
-        DashCooldown();
+        if (!isDashing)
+        {
+            Run();
+            Jump();
+        }
+     
+        HandleDash();
+
+
         Attack();
 
         myAnimator.SetFloat("MoveSpeed", Mathf.Abs(rb.velocity.x));
@@ -69,7 +81,7 @@ public class Player : MonoBehaviour
         myAnimator.SetBool("ifAttacking", isAttacking);
         myAnimator.SetBool("ifJumping", isJumping);
         myAnimator.SetBool("ifFalling", isFalling);
-    
+
 
 
 
@@ -82,9 +94,9 @@ public class Player : MonoBehaviour
         {
             facingRight = true;
         }
-        
-        
-        
+
+
+
     }
 
     private void Attack()
@@ -96,7 +108,7 @@ public class Player : MonoBehaviour
         }
         if (isAttacking)
         {
-            if(attackTimer > 0)
+            if (attackTimer > 0)
             {
                 attackTimer -= Time.deltaTime;
             }
@@ -109,113 +121,104 @@ public class Player : MonoBehaviour
 
     private void Run()
     {
-		if (Input.GetAxisRaw ("Horizontal") > 0f) {
-			rb.velocity = new Vector3 (runSpeed, rb.velocity.y, 0f);
-			mySpriteRenderer.flipX = false;
-		} else if (Input.GetAxisRaw ("Horizontal") < 0f) {
-			rb.velocity = new Vector3 (-runSpeed, rb.velocity.y, 0f);
-			mySpriteRenderer.flipX = true;
-		} else if (dashTime > 0)
-			return;
-        else rb.velocity = new Vector3(0f, rb.velocity.y, 0f);
+        if (Input.GetAxisRaw("Horizontal") > 0f)
+        {
+            rb.velocity = new Vector3(runSpeed, rb.velocity.y, 0f);
+            mySpriteRenderer.flipX = false;
+        }
+        else if (Input.GetAxisRaw("Horizontal") < 0f)
+        {
+            rb.velocity = new Vector3(-runSpeed, rb.velocity.y, 0f);
+            mySpriteRenderer.flipX = true;
+        }
     }
 
     private void Jump()
     {
-        
-            if(rb.velocity.y <= 0)
-            {
+
+        if (rb.velocity.y <= 0)
+        {
             grounded = true;
             isJumping = false;
             isFalling = false;
-            }
-            if(rb.velocity.y < -5) //temporary - need fix (values just for bridge)
-            {
+        }
+        if (rb.velocity.y < -5) //temporary - need fix (values just for bridge)
+        {
             grounded = false;
             isJumping = false;
             isFalling = true;
-            }
-     
+        }
 
-            if(grounded)
-            {
+
+        if (grounded)
+        {
             canDoubleJump = true;
-            }
-            if (grounded && Input.GetButtonDown("Jump"))
-            {
+        }
+        if (grounded && Input.GetButtonDown("Jump"))
+        {
             rb.velocity = new Vector2(rb.velocity.x, jumpHeight);
             grounded = false;
             isJumping = true;
             isFalling = false;
-            }
+        }
 
-        
-        
-            else if (canDoubleJump && Input.GetButtonDown("Jump"))
-            {
-            rb.velocity = new Vector2(rb.velocity.x, jumpHeight*1.2f);
+
+
+        else if (canDoubleJump && Input.GetButtonDown("Jump"))
+        {
+            rb.velocity = new Vector2(rb.velocity.x, jumpHeight * 1.2f);
             grounded = false;
             isJumping = true;
             isFalling = false;
             canDoubleJump = false;
-            }
-        
+        }
 
-        
-        
+
+
+
     }
 
-    private void Dash()
+    void Dash()
     {
-        //left ctrl
-
-        if (Input.GetButtonDown("Dash"))
+        timeToEndOfTheCurrentDash -= Time.deltaTime;
+        if (facingRight)
         {
-			Debug.Log ("Dash");
-            if (dashTime <= 0)
-            {
-                dashTime = startDashTime;
-            }
-            else
-            {
-                dashTime -= Time.deltaTime;
-                if (facingRight)
-                {
-                    rb.velocity = Vector2.right * dashSpeed;
-                    coolDownTimer = coolDown;
-                }
+            rb.velocity = Vector2.right * dashSpeed;
+        }
 
-                if (!facingRight)
-                {
-                    rb.velocity = Vector2.left * dashSpeed;
-                    coolDownTimer = coolDown;
-                }
+        if (!facingRight)
+        {
+            rb.velocity = Vector2.left * dashSpeed;
+        }
+
+        if(timeToEndOfTheCurrentDash <0)
+        {
+            isDashing = false;
+            minimalTimeToNextDash = cooldownBetweenDashes;
+        }
+
+    }
+
+
+    private void HandleDash()
+    {
+        
+        if (minimalTimeToNextDash > 0)
+            minimalTimeToNextDash -= Time.deltaTime;
+        else
+            minimalTimeToNextDash = 0;
+
+        if (minimalTimeToNextDash <= 0)
+            if (Input.GetButtonDown("Dash"))
                 isDashing = true;
-            }
-        }
-        else isDashing = false;
-    }
 
-    private void DashCooldown()
-    {
-        if (coolDownTimer > 0)
-        {
-            coolDownTimer -= Time.deltaTime;
-            
-        }
-
-        if (coolDownTimer < 0)
-        {
-            coolDownTimer = 0;
-        }
-
-        if (coolDownTimer == 0)
+        if (isDashing)
         {
             Dash();
         }
     }
 
-    
 
-   
+
+
 }
