@@ -5,11 +5,9 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-<<<<<<< HEAD
+
 public class Player : MonoBehaviour 
-=======
-public class Player : MonoBehaviour
->>>>>>> 7c371a28595a0c6c87bc7ea77e9d139662784b6b
+
 {
 
      
