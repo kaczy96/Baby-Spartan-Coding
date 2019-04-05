@@ -6,11 +6,9 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 
-public class Player : MonoBehaviour 
+public class Player : MonoBehaviour
 
 {
-
-     
     [SerializeField] float runSpeed = 5f;
     [SerializeField] float jumpHeight = 5f;
     [SerializeField] float dashSpeed = 5f;
@@ -23,7 +21,6 @@ public class Player : MonoBehaviour
     Rigidbody2D rb;
     Collider2D myCollider2D;
     bool canDoubleJump;
-    public bool isDashing;
     private float timeToEndOfTheCurrentDash;
     [SerializeField] float minimalTimeSinceLastDash = 1;
     public Transform groundCheck;
@@ -57,17 +54,14 @@ public class Player : MonoBehaviour
     }
 
 
-
-
-
     void Update()
     {
-        if (!isDashing)
+        if (!IsDashing())
         {
             Run();
             Jump();
         }
-     
+
         HandleDash();
 
 
@@ -75,7 +69,7 @@ public class Player : MonoBehaviour
 
         myAnimator.SetFloat("MoveSpeed", Mathf.Abs(rb.velocity.x));
         myAnimator.SetBool("ifGrounded", grounded);
-        myAnimator.SetBool("ifDashing", isDashing);
+        myAnimator.SetBool("ifDashing", IsDashing());
         myAnimator.SetBool("ifAttacking", isAttacking);
         myAnimator.SetBool("ifJumping", isJumping);
         myAnimator.SetBool("ifFalling", isFalling);
@@ -129,7 +123,12 @@ public class Player : MonoBehaviour
             rb.velocity = new Vector3(-runSpeed, rb.velocity.y, 0f);
             mySpriteRenderer.flipX = true;
         }
+        else if (CouldStartNextDash())
+        {
+            rb.velocity = new Vector3(0f, rb.velocity.y, 0f);
+        }
     }
+
 
     private void Jump()
     {
@@ -171,14 +170,30 @@ public class Player : MonoBehaviour
             canDoubleJump = false;
         }
 
-
-
-
     }
 
-    void Dash()
+
+
+    private void HandleDash()
     {
-        timeToEndOfTheCurrentDash -= Time.deltaTime;
+        minimalTimeToNextDash = DecreaseTime(minimalTimeToNextDash);
+        timeToEndOfTheCurrentDash = DecreaseTime(timeToEndOfTheCurrentDash);
+
+        if (minimalTimeToNextDash <= 0)
+            if (Input.GetButtonDown("Dash"))
+                StartDashing();
+    }
+
+    float DecreaseTime(float value)
+    {
+        return Mathf.Max(0, value - Time.deltaTime);
+    }
+
+    private void StartDashing()
+    {
+        timeToEndOfTheCurrentDash = 0.3f;
+        minimalTimeToNextDash = cooldownBetweenDashes;
+
         if (facingRight)
         {
             rb.velocity = Vector2.right * dashSpeed;
@@ -188,34 +203,21 @@ public class Player : MonoBehaviour
         {
             rb.velocity = Vector2.left * dashSpeed;
         }
-
-        if(timeToEndOfTheCurrentDash <0)
-        {
-            isDashing = false;
-            minimalTimeToNextDash = cooldownBetweenDashes;
-        }
-
     }
 
-
-    private void HandleDash()
+    bool CouldStartNextDash()
     {
-        
+        if (IsDashing())
+            return false;
         if (minimalTimeToNextDash > 0)
-            minimalTimeToNextDash -= Time.deltaTime;
-        else
-            minimalTimeToNextDash = 0;
-
-        if (minimalTimeToNextDash <= 0)
-            if (Input.GetButtonDown("Dash"))
-                isDashing = true;
-
-        if (isDashing)
-        {
-            Dash();
-        }
+            return false;
+        return true;
     }
 
+    bool IsDashing()
+    {
+        return timeToEndOfTheCurrentDash > 0;
+    }
 
 
 
